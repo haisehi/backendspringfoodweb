@@ -1,0 +1,83 @@
+package com.example.foodweb.Model;
+
+import jakarta.persistence.*;
+import jakarta.persistence.Id;
+
+import java.sql.Date;
+
+@Entity
+@Table(name = "book_party")
+public class BookParty {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_party")
+    private Integer idParty;
+
+    private Date dateOrder;
+    private String timeOrder;
+    private int quantity;
+    private String address;
+    private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "id_customer", nullable = false)
+    private Customer customer;
+
+    // Getters and setters
+    public Integer  getIdParty() {
+        return idParty;
+    }
+
+    public void setIdParty(Integer  idParty) {
+        this.idParty = idParty;
+    }
+
+    public Date getDateOrder() {
+        return dateOrder;
+    }
+
+    public void setDateOrder(Date dateOrder) {
+        this.dateOrder = dateOrder;
+    }
+
+    public String getTimeOrder() {
+        return timeOrder;
+    }
+
+    public void setTimeOrder(String timeOrder) {
+        this.timeOrder = timeOrder;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+}
