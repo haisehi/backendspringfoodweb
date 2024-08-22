@@ -127,4 +127,9 @@ public class Payment {
     public void setCartItem(CartItem cartItem) {
         this.cartItem = cartItem;
     }
+
+    // Thêm phương thức getter để lấy id_categories
+    public Integer getIdCart() {
+        return cartItem != null ? cartItem.getIdCart() : null;
+    }
 }

@@ -15,10 +15,13 @@ public class Food {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID_food")
     private Integer idFood;
+
     @Column(name = "name_food")
     private String nameFood;
+
     @Column(name = "image_food")
     private String imageFood;
+
     private int price;
 
     @ManyToOne
@@ -26,14 +29,8 @@ public class Food {
     @JsonBackReference
     private CategoryFood categoryFood;
 
-//    @OneToMany(mappedBy = "food")
-//    @JsonManagedReference
-//    private <CartItem> cartItems;
-
     // Getters and setters
-    public  Food(){
-
-    }
+    public Food() {}
 
     public Food(Integer idFood, String nameFood, String imageFood, int price, CategoryFood categoryFood) {
         this.idFood = idFood;
@@ -75,12 +72,16 @@ public class Food {
         this.price = price;
     }
 
-    public CategoryFood getCategoryFood() { // Sửa getter
+    public CategoryFood getCategoryFood() {
         return categoryFood;
     }
 
-    public void setCategoryFood(CategoryFood categoryFood) { // Sửa setter
+    public void setCategoryFood(CategoryFood categoryFood) {
         this.categoryFood = categoryFood;
     }
-}
 
+    // Thêm phương thức getter để lấy id_categories
+    public Integer getCategoryId() {
+        return categoryFood != null ? categoryFood.getIdCategories() : null;
+    }
+}
