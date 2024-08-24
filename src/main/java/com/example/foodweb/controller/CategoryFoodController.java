@@ -14,19 +14,27 @@ public class CategoryFoodController {
 
     @Autowired
     private CategoryFoodService categoryFoodService;
-    //  thêm danh mục
-    @PostMapping
-    public ResponseEntity<CategoryFood> addCategoryFood(@RequestBody CategoryFood categoryFood) {
+
+    // Thêm danh mục với tên hình ảnh
+    @PostMapping("/add")
+    public ResponseEntity<CategoryFood> addCategoryFood(
+            @RequestParam("name_categories") String nameCategories,
+            @RequestParam("image_categories") String imageCategories) {
+        CategoryFood categoryFood = new CategoryFood();
+        categoryFood.setNameCategories(nameCategories);
+        categoryFood.setImageCategories(imageCategories);
         CategoryFood createdCategory = categoryFoodService.addCategoryFood(categoryFood);
         return ResponseEntity.ok(createdCategory);
     }
-    // lấy tất cả danh mục
+
+    // Lấy tất cả danh mục
     @GetMapping
     public ResponseEntity<List<CategoryFood>> getAllCategories() {
         List<CategoryFood> categories = categoryFoodService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
-    // lấy danh mục theo id
+
+    // Lấy danh mục theo id
     @GetMapping("/{id}")
     public ResponseEntity<CategoryFood> getCategoryById(@PathVariable Integer id) {
         CategoryFood category = categoryFoodService.getCategoryById(id);
@@ -36,7 +44,8 @@ public class CategoryFoodController {
             return ResponseEntity.notFound().build();
         }
     }
-    // sửa danh mục theo id
+
+    // Sửa danh mục theo id
     @PutMapping("/{id}")
     public ResponseEntity<CategoryFood> updateCategoryFood(@PathVariable Integer id, @RequestBody CategoryFood categoryFood) {
         CategoryFood existingCategory = categoryFoodService.getCategoryById(id);
@@ -48,7 +57,8 @@ public class CategoryFoodController {
             return ResponseEntity.notFound().build();
         }
     }
-    // xoá danh mục theo id
+
+    // Xóa danh mục theo id
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCategoryFood(@PathVariable Integer id) {
         CategoryFood existingCategory = categoryFoodService.getCategoryById(id);

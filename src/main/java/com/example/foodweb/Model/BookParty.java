@@ -1,5 +1,6 @@
 package com.example.foodweb.Model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
@@ -14,15 +15,37 @@ public class BookParty {
     @Column(name = "id_party")
     private Integer idParty;
 
+    @Column(name = "dateOrder")
     private Date dateOrder;
+
+    @Column(name = "timeOrder")
     private String timeOrder;
+
+    @Column(name = "quantity")
     private int quantity;
+
+    @Column(name = "address")
     private String address;
+
+    @Column(name = "content")
     private String content;
 
     @ManyToOne
     @JoinColumn(name = "id_customer", nullable = false)
+    @JsonBackReference
     private Customer customer;
+
+    public  BookParty(){}
+
+    public BookParty(Integer idParty, Date dateOrder, String timeOrder, int quantity, String address, String content, Customer customer) {
+        this.idParty = idParty;
+        this.dateOrder = dateOrder;
+        this.timeOrder = timeOrder;
+        this.quantity = quantity;
+        this.address = address;
+        this.content = content;
+        this.customer = customer;
+    }
 
     // Getters and setters
     public Integer  getIdParty() {

@@ -50,6 +50,10 @@ public class Customer implements UserDetails {
     @JsonManagedReference
     private List<CartItem> cartItems;
 
+    @OneToMany(mappedBy = "customer")
+    @JsonManagedReference
+    private List<BookParty> bookParty;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
