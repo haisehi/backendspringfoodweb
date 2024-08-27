@@ -1,55 +1,40 @@
 package com.example.foodweb.controller;
 
 import com.example.foodweb.Model.BookParty;
-import com.example.foodweb.Model.Customer;
-import com.example.foodweb.repository.BookPartyRepository;
-import com.example.foodweb.repository.UserReponsitory;
+import com.example.foodweb.service.BookPartyService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/api/v1/auth/bookparty")
 public class BookingController {
 
     @Autowired
-    private BookPartyRepository bookPartyRepository;
+    private BookPartyService bookPartyService;
 
-    @Autowired
-    private UserReponsitory customerRepository;
+    // Thêm mới một book party
+    @PostMapping("/add")
+    public ResponseEntity<BookParty> addBookParty(@RequestBody BookParty bookParty, @RequestParam Integer customerId) {
+        BookParty newBookParty = bookPartyService.saveBookParty(bookParty, customerId);
+        return ResponseEntity.ok(newBookParty);
+    }
 
-    @PostMapping("/bookParty")
-    public String bookParty(@RequestParam("id_customer") Integer idCustomer,
-                            @RequestParam("dateOrder") Date dateOrder,
-                            @RequestParam("timeOrder") String timeOrder,
-                            @RequestParam("quantity") int quantity,
-                            @RequestParam("address") String address,
-                            @RequestParam("content") String content,
-                            Model model) {
+    // Lấy danh sách book party theo ID khách hàng
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<List<BookParty>> getBookPartiesByCustomer(@PathVariable Integer customerId) {
+        List<BookParty> bookParties = bookPartyService.getBookPartiesByCustomerId(customerId);
+        return ResponseEntity.ok(bookParties);
+    }
 
-        Customer customer = customerRepository.findById(idCustomer).orElse(null);
-
-        if (customer != null) {
-            BookParty bookParty = new BookParty();
-            bookParty.setDateOrder(dateOrder);
-            bookParty.setTimeOrder(timeOrder);
-            bookParty.setQuantity(quantity);
-            bookParty.setAddress(address);
-            bookParty.setContent(content);
-            bookParty.setCustomer(customer);
-
-            bookPartyRepository.save(bookParty);
-            model.addAttribute("message", "Booking successful!");
-
-            return "confirmation"; // Chuyển đến trang xác nhận
-        } else {
-            model.addAttribute("error", "Customer not found");
-            return "error"; // Chuyển đến trang lỗi
-        }
+    // Lấy danh sách tất cả các book party
+    @GetMapping("/all")
+    public ResponseEntity<List<BookParty>> getAllBookParties() {
+        List<BookParty> bookParties = bookPartyService.getAllBookParties();
+        return ResponseEntity.ok(bookParties);
     }
 }

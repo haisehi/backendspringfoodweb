@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.persistence.Id;
 
 import java.sql.Date;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "book_party")
@@ -15,11 +17,11 @@ public class BookParty {
     @Column(name = "id_party")
     private Integer idParty;
 
-    @Column(name = "dateOrder")
-    private Date dateOrder;
+    @Column(name = "date_order")
+    private LocalDate date_order;
 
-    @Column(name = "timeOrder")
-    private String timeOrder;
+    @Column(name = "time_order")
+    private LocalTime time_order;
 
     @Column(name = "quantity")
     private int quantity;
@@ -37,10 +39,10 @@ public class BookParty {
 
     public  BookParty(){}
 
-    public BookParty(Integer idParty, Date dateOrder, String timeOrder, int quantity, String address, String content, Customer customer) {
+    public BookParty(Integer idParty, LocalDate  date_order, LocalTime time_order, int quantity, String address, String content, Customer customer) {
         this.idParty = idParty;
-        this.dateOrder = dateOrder;
-        this.timeOrder = timeOrder;
+        this.date_order = date_order;
+        this.time_order = time_order;
         this.quantity = quantity;
         this.address = address;
         this.content = content;
@@ -56,20 +58,20 @@ public class BookParty {
         this.idParty = idParty;
     }
 
-    public Date getDateOrder() {
-        return dateOrder;
+    public LocalDate  getDateOrder() {
+        return date_order;
     }
 
-    public void setDateOrder(Date dateOrder) {
-        this.dateOrder = dateOrder;
+    public void setDateOrder(LocalDate  dateOrder) {
+        this.date_order = dateOrder;
     }
 
-    public String getTimeOrder() {
-        return timeOrder;
+    public LocalTime getTimeOrder() {
+        return time_order;
     }
 
-    public void setTimeOrder(String timeOrder) {
-        this.timeOrder = timeOrder;
+    public void setTimeOrder(LocalTime timeOrder) {
+        this.time_order = timeOrder;
     }
 
     public int getQuantity() {
@@ -103,4 +105,10 @@ public class BookParty {
     public void setCustomer(Customer customer) {
         this.customer = customer;
     }
+
+    // Thêm phương thức getter để lấy id_categories
+    public Integer getCustomerID() {
+        return customer != null ? customer.getIdCustomer() : null;
+    }
+
 }
