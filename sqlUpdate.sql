@@ -7,7 +7,7 @@ use databaseSpringFood;
 CREATE TABLE `book_party` (
   `id_party` int(11) NOT NULL AUTO_INCREMENT,
   `date_order` date NOT NULL,
-  `time_order` varchar(50) NOT NULL,
+  `time_order` TIME NULL,
   `quantity` int(11) NOT NULL,
   `address` varchar(250) NOT NULL,
   `content` varchar(250) NOT NULL,
@@ -17,20 +17,14 @@ CREATE TABLE `book_party` (
   CONSTRAINT `book_party_ibfk_1` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-delete from `book_party` where id_party = 4;
-ALTER TABLE `book_party` MODIFY time_order TIME NULL;
-
 
 -- Cấu trúc bảng cho bảng `categories`
 CREATE TABLE `categories` (
   `id_categories` int(11) NOT NULL AUTO_INCREMENT,
   `name_categories` varchar(100) NOT NULL,
-  `image_categories` varchar(100) NOT NULL,
+  `image_categories` varchar(255) NOT NULL,
   PRIMARY KEY (`id_categories`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-ALTER TABLE `categories`
-MODIFY COLUMN `image_categories` varchar(255) NOT NULL;
 
 
 -- Cấu trúc bảng cho bảng `customer`
@@ -43,11 +37,9 @@ CREATE TABLE `customer` (
   `gender` varchar(20) NOT NULL,
   `date` date NOT NULL,
   `password` varchar(100) NOT NULL,
+  `role` ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER',
   PRIMARY KEY (`id_customer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-ALTER TABLE databasespringfood.customer
-ADD COLUMN role ENUM('USER', 'ADMIN') NOT NULL DEFAULT 'USER';
 
 
 -- Cấu trúc bảng cho bảng `food`
@@ -68,17 +60,13 @@ CREATE TABLE `cart` (
   `ID_food` int(11) NOT NULL,
   `id_customer` int(11) NOT NULL,
   `quantity` int(11) NOT NULL,
+  `status` INT DEFAULT 0,
   PRIMARY KEY (`id_cart`),
   KEY `id_customer` (`id_customer`),
   KEY `ID_food` (`ID_food`),
   CONSTRAINT `cart_ibfk_1` FOREIGN KEY (`ID_food`) REFERENCES `food` (`ID_food`),
   CONSTRAINT `cart_ibfk_2` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
-ALTER TABLE databasespringfood.cart
-ADD COLUMN status INT DEFAULT 0;
-
-delete from `cart` where id_cart = 11;
 
 
 -- Cấu trúc bảng cho bảng `payment`
@@ -88,45 +76,15 @@ CREATE TABLE `payment` (
   `price` float NOT NULL,
   `total` float NOT NULL,
   `quantity` int(11) NOT NULL,
-  `fullName` varchar(100) NOT NULL,
-  `email` varchar(100) NOT NULL,
   `address` varchar(100) NOT NULL,
-  `id_customer` int(11) NOT NULL,
   PRIMARY KEY (`id_payment`),
-  KEY `id_customer` (`id_customer`),
-  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`id_customer`) REFERENCES `customer` (`id_customer`)
+  `id_cart` INT NOT NULL,
+  `time` DATETIME DEFAULT CURRENT_TIMESTAMP,
+  `status_pay` INT NOT NULL DEFAULT 0,
+  CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`id_cart`) REFERENCES `cart` (`id_cart`)
+
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Thêm cột `id_cart` vào bảng `payment`
-ALTER TABLE `payment`
-ADD COLUMN `id_cart` INT NOT NULL;
-
-ALTER TABLE `payment`
-DROP FOREIGN KEY `payment_ibfk_1`;
-
--- Xóa cột `id_customer` nếu không cần thiết
-ALTER TABLE `payment`
-DROP COLUMN `id_customer`;
-
--- Thêm ràng buộc khóa ngoại giữa `id_cart` và `id_cart` trong bảng `cart`
-ALTER TABLE `payment`
-ADD CONSTRAINT `payment_ibfk_1` FOREIGN KEY (`id_cart`) REFERENCES `cart` (`id_cart`);
-
-ALTER TABLE `payment`
-DROP COLUMN `full_Name`;
-
-ALTER TABLE `payment`
-DROP COLUMN `fullName`;
-
-ALTER TABLE `payment`
-DROP COLUMN `email`;
-
-ALTER TABLE `payment`
-ADD COLUMN `time` DATETIME DEFAULT CURRENT_TIMESTAMP;
-
--- Thêm cột `status_pay` với kiểu dữ liệu `INT` và giá trị mặc định là 0
-ALTER TABLE `payment`
-ADD COLUMN `status_pay` INT NOT NULL DEFAULT 0;
 
 -- Cấu trúc bảng cho bảng `poster`
 CREATE TABLE `poster` (
@@ -214,8 +172,8 @@ INSERT INTO `food` (`ID_food`, `name_food`, `image_food`, `price`, `id_categorie
 (42, '1 ROASTED FILLET', 'MOD-PHI-LE-GA-QUAY.jpg', 38000, 6);
 
 -- Đang đổ dữ liệu cho bảng `payment`
-INSERT INTO `payment` (`id_payment`, `name_food`, `price`, `total`, `quantity`, `fullName`, `email`, `address`, `id_customer`) VALUES
-(1, '1 Sassy Chicken, 1 CAJUN CHICKEN POPSICLES, Pepsi Zero Can', 17000, 139000, 4, 'Quang Huy', 'huy@gmail.com', 'vku university - Da Nang City', 1);
+-- INSERT INTO `payment` (`id_payment`, `name_food`, `price`, `total`, `quantity`, `fullName`, `email`, `address`, `id_customer`) VALUES
+-- (1, '1 Sassy Chicken, 1 CAJUN CHICKEN POPSICLES, Pepsi Zero Can', 17000, 139000, 4, 'Quang Huy', 'huy@gmail.com', 'vku university - Da Nang City', 1);
 
 -- Đang đổ dữ liệu cho bảng `poster`
 INSERT INTO `poster` (`id_image`, `name_image`, `image`) VALUES
