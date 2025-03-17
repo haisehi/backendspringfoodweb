@@ -1,5 +1,5 @@
 # Build stage
-FROM maven:3-eclipse-temurin-21 AS build
+FROM maven:3-openjdk-17 AS build
 WORKDIR /app
 # Copy toàn bộ source code vào container
 COPY . .
@@ -7,7 +7,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # Run stage
-FROM eclipse-temurin:21-jdk-slim
+FROM openjdk:17-jdk-slim
 WORKDIR /app
 # Copy file .war đã build từ stage build
 COPY --from=build /app/target/foodweb-0.0.1-SNAPSHOT.war foodweb.war
