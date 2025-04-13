@@ -57,7 +57,10 @@ public class SecurityConfiguration {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://127.0.0.1:5500")); // Thay đổi URL thành URL của frontend
+        configuration.setAllowedOrigins(Arrays.asList(
+        "http://127.0.0.1:5500",                        // local dev
+        "https://foodweb-vku-vn.netlify.app"           // Netlify domain của bạn
+        ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
